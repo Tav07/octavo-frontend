@@ -1,0 +1,64 @@
+/* ============================================================
+   Octavo Zapatos — estilos globales (Tailwind 4)
+   Paleta: naranja #f97316 · azul #2563eb · tinta #1c1e26
+   Tipografías: Syne (display) + Inter (texto) — via next/font
+   ============================================================ */
+@import "tailwindcss";
+
+/* Paleta de la Entrega 1, expuesta como utilidades de Tailwind
+   (ej.: bg-naranja, text-tinta, border-borde, bg-gris-suave). */
+@theme {
+  --color-naranja: #f97316;
+  --color-naranja-oscuro: #ea580c;
+  --color-azul: #2563eb;
+  --color-tinta: #1c1e26;
+  --color-tinta-suave: rgb(255 255 255 / 75%);
+  --color-fondo: #ffffff;
+  --color-gris-suave: #f6f6f8;
+  --color-borde: #e5e7eb;
+  --color-texto-suave: #55575f;
+  --color-error: #dc2626;
+  --color-exito: #16a34a;
+}
+
+/* Tipografías cargadas por next/font en el layout (variables CSS
+   inyectadas en el html), mapeadas a utilidades font-sans/display. */
+@theme inline {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-syne), system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    /* Deja espacio para el header fijo al saltar a las secciones */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background: var(--color-fondo);
+    color: var(--color-tinta);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-syne), system-ui, sans-serif;
+    line-height: 1.1;
+  }
+
+  ::selection {
+    background: var(--color-naranja);
+    color: var(--color-fondo);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-naranja);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
