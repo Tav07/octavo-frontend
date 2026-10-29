@@ -88,3 +88,10 @@ export async function http<T>(ruta: string, opciones: OpcionesHttp = {}): Promis
   if (respuesta.status === 204) return undefined as T;
   return (await respuesta.json()) as T;
 }
+
+// Mensaje listo para mostrar al usuario ante cualquier causa de fallo:
+// errores de la API (HttpError) o fallo de red/conexión (genérico).
+export function mensajeDeError(error: unknown): string {
+  if (error instanceof HttpError) return error.message;
+  return "No se pudo conectar con la API. Revisa tu conexión e inténtalo de nuevo.";
+}
