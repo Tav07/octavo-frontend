@@ -16,3 +16,8 @@ export async function crearReserva(datos: DatosReserva): Promise<Reserva> {
 export async function listarMisReservas(): Promise<Reserva[]> {
   return await http<Reserva[]>("/reservas/mias");
 }
+
+// GET /api/reservas (solo admin): todas, con la persona y el zapato.
+export async function listarTodasReservas(): Promise<Reserva[]> {
+  return await http<Reserva[]>("/reservas");
+}

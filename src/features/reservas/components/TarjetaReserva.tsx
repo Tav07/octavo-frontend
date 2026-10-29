@@ -6,6 +6,8 @@ import { formatearPrecio } from "@/features/zapatos/domain/precio";
 // reservado (nombre, imagen, precio) más los datos del formulario.
 interface Props {
   reserva: Reserva;
+  // La vista de admin además muestra quién reservó (nombre y email)
+  mostrarUsuario?: boolean;
 }
 
 export function formatearFecha(iso: string): string {
@@ -16,7 +18,7 @@ export function formatearFecha(iso: string): string {
   });
 }
 
-export default function TarjetaReserva({ reserva }: Props) {
+export default function TarjetaReserva({ reserva, mostrarUsuario = false }: Props) {
   return (
     <li className="flex flex-col gap-4 overflow-hidden rounded-2xl border border-borde bg-fondo p-4 sm:flex-row sm:items-center">
       <div className="relative aspect-[4/3] w-full shrink-0 bg-gris-suave sm:aspect-square sm:w-40">
@@ -29,6 +31,14 @@ export default function TarjetaReserva({ reserva }: Props) {
         />
       </div>
       <div className="flex flex-1 flex-col gap-1.5">
+        {mostrarUsuario && (
+          <p className="text-sm font-semibold text-tinta">
+            {reserva.usuario.nombre}{" "}
+            <span className="font-normal text-texto-suave">
+              ({reserva.usuario.email})
+            </span>
+          </p>
+        )}
         <h3 className="font-display text-lg font-bold tracking-tight">
           {reserva.zapato.nombre}
         </h3>
