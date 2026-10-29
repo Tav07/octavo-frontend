@@ -3,6 +3,7 @@ import Link from "next/link";
 import Loading from "@/features/common/components/Loading";
 import Catalogo from "@/features/zapatos/components/Catalogo";
 import ListaMarcas from "@/features/zapatos/components/ListaMarcas";
+import FormularioReserva from "@/features/reservas/components/FormularioReserva";
 
 // Home con las secciones y textos exactos de la Entrega 1.
 // El catálogo y las marcas vienen SIEMPRE de la API (sin datos locales);
@@ -66,10 +67,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* RESERVA (el formulario se conecta a la API en la fase 9) */}
+      {/* RESERVA (formulario conectado a POST /api/reservas; requiere sesión) */}
       <section
         id="reserva"
-        className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8"
+        className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8"
       >
         <h2 className="font-display text-3xl font-bold tracking-tight">
           Reserva tu pedido
@@ -78,6 +79,9 @@ export default function Home() {
           Déjanos tus datos y el par que quieres. Te contactamos para confirmar
           disponibilidad, precio final y forma de pago. Sin compromiso.
         </p>
+        <div className="mt-8">
+          <FormularioReserva />
+        </div>
       </section>
     </main>
   );
