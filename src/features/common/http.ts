@@ -21,6 +21,8 @@ export class HttpError extends Error {
 }
 
 interface OpcionesHttp {
+  // Por defecto GET; el body solo es válido con POST/PUT/PATCH/DELETE
+  method?: string;
   body?: unknown;
   headers?: Record<string, string>;
   signal?: AbortSignal;
@@ -62,7 +64,7 @@ async function errorDe(respuesta: Response): Promise<{
 }
 
 export async function http<T>(ruta: string, opciones: OpcionesHttp = {}): Promise<T> {
-  const { body, headers, signal, redirigirEn401 = true } = opciones;
+  const { body, headers, signal, redirigirEn401 = true, method = "GET" } = opciones;
   const token = leerToken();
 
   const cabeceras: Record<string, string> = { ...headers };
@@ -70,6 +72,7 @@ export async function http<T>(ruta: string, opciones: OpcionesHttp = {}): Promis
   if (token !== null) cabeceras["Authorization"] = `Bearer ${token}`;
 
   const respuesta = await fetch(`${API_BASE_URL}${ruta}`, {
+    method,
     headers: cabeceras,
     signal,
     body: body === undefined ? undefined : JSON.stringify(body),

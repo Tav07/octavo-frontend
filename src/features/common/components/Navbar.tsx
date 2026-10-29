@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const ENLACES = [
   { href: "/", texto: "Inicio" },
@@ -10,11 +11,13 @@ const ENLACES = [
   { href: "/#reserva", texto: "Reserva" },
 ];
 
-// Estado de la fase 3: invitado con "Ingresar".
-// En la fase 8 (sesión) el enlace se convierte en nombre + Salir,
-// y en Administración para el rol admin.
+// Navbar según sesión: invitado → "Ingresar"; usuario → su nombre y
+// "Salir"; admin → además el enlace "Administración".
 export default function Navbar() {
   const [abierto, setAbierto] = useState(false);
+  const { usuario, salir } = useAuth();
+
+  const alCerrarMenu = () => setAbierto(false);
 
   return (
     <header className="relative z-10 flex items-center justify-between gap-8 border-b border-borde bg-fondo px-4 py-4 sm:px-6 lg:px-12">
@@ -48,21 +51,66 @@ export default function Navbar() {
               <Link
                 href={enlace.href}
                 className="font-medium text-tinta transition-colors hover:text-naranja"
-                onClick={() => setAbierto(false)}
+                onClick={alCerrarMenu}
               >
                 {enlace.texto}
               </Link>
             </li>
           ))}
+          {usuario?.role === "admin" && (
+            <li>
+              <Link
+                href="/admin"
+                className="font-medium text-naranja transition-colors hover:text-naranja-oscuro"
+                onClick={alCerrarMenu}
+              >
+                Administración
+              </Link>
+            </li>
+          )}
+          {usuario !== null && (
+            <li className="sm:hidden">
+              <span className="font-medium text-tinta">{usuario.nombre}</span>
+            </li>
+          )}
+          {usuario !== null && (
+            <li className="sm:hidden">
+              <button
+                type="button"
+                className="font-medium text-tinta transition-colors hover:text-naranja"
+                onClick={() => {
+                  alCerrarMenu();
+                  salir();
+                }}
+              >
+                Salir
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
 
-      <Link
-        href="/login"
-        className="hidden rounded-lg bg-naranja px-4 py-2 text-sm font-semibold text-fondo transition-colors hover:bg-naranja-oscuro sm:block"
-      >
-        Ingresar
-      </Link>
+      {usuario === null ? (
+        <Link
+          href="/login"
+          className="rounded-lg bg-naranja px-4 py-2 text-sm font-semibold text-fondo transition-colors hover:bg-naranja-oscuro"
+        >
+          Ingresar
+        </Link>
+      ) : (
+        <div className="hidden items-center gap-4 sm:flex">
+          <span className="text-sm font-medium text-texto-suave max-w-40 truncate">
+            {usuario.nombre}
+          </span>
+          <button
+            type="button"
+            onClick={salir}
+            className="rounded-lg border border-borde px-4 py-2 text-sm font-semibold text-tinta transition-colors hover:border-naranja"
+          >
+            Salir
+          </button>
+        </div>
+      )}
     </header>
   );
 }
