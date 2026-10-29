@@ -41,24 +41,26 @@ export default function Catalogo() {
     return <ErrorState mensaje={error} alReintentar={reintentar} />;
   }
 
-  if (datos === null || datos.data.length === 0) {
-    return (
-      <Empty texto="No hay zapatos para mostrar en el catálogo por ahora." />
-    );
+  if (datos === null) {
+    return <Empty texto="No hay zapatos para mostrar en el catálogo por ahora." />;
   }
 
   const { pagination, data } = datos;
-  // Si se pidió una página fuera de rango (ej.: ?page=99) igualmente se
-  // puede volver con los botones usando la última página válida.
+  // Si se pidió una página fuera de rango (ej.: ?page=99) se ve el estado
+  // vacío, pero la paginación sigue presente para volver a una página válida.
   const paginaVisible = Math.min(pagina, pagination.totalPages);
 
   return (
     <>
-      <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {data.map((zapato) => (
-          <TarjetaZapato key={zapato.id} zapato={zapato} />
-        ))}
-      </ul>
+      {data.length === 0 ? (
+        <Empty texto="No hay zapatos para mostrar en el catálogo por ahora." />
+      ) : (
+        <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {data.map((zapato) => (
+            <TarjetaZapato key={zapato.id} zapato={zapato} />
+          ))}
+        </ul>
+      )}
       <Pagination
         pagina={paginaVisible}
         totalPaginas={pagination.totalPages}
