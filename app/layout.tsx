@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import { ProveedorAuth } from "@/features/auth/hooks/useAuth";
+import { ProveedorCarrito } from "@/features/carrito/components/ProveedorCarrito";
 import Navbar from "@/features/common/components/Navbar";
 import Footer from "@/features/common/components/Footer";
 import "./globals.css";
@@ -32,9 +33,11 @@ export default function RootLayout({
     <html lang="es" className={`${inter.variable} ${syne.variable}`}>
       <body className="font-sans">
         <ProveedorAuth>
-          <Navbar />
-          {children}
-          <Footer />
+          <ProveedorCarrito>
+            <Navbar />
+            {children}
+            <Footer />
+          </ProveedorCarrito>
         </ProveedorAuth>
       </body>
     </html>

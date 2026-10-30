@@ -12,6 +12,7 @@ export interface Zapato {
   categoria: string;
   precio: number;
   talla: number;
+  tallas: number[];
   descripcion: string;
   // Ruta pública de la imagen: /images/archivo.jpg
   imagen: string;
