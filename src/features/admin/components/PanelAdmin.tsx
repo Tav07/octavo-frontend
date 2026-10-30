@@ -1,7 +1,9 @@
-// Panel de administración: CRUD de zapatos y listado de todas las reservas.
+// Panel de administración: CRUD de zapatos, todas las reservas y todos
+// los pedidos con su estado (pendiente de pago / entregado).
 // El acceso por rol lo controla la página /admin; aquí solo la vista.
 import GestionZapatos from "./GestionZapatos";
 import ListaReservasAdmin from "./ListaReservasAdmin";
+import ListaPedidosAdmin from "@/features/pedidos/components/ListaPedidosAdmin";
 
 export default function PanelAdmin() {
   return (
@@ -12,7 +14,7 @@ export default function PanelAdmin() {
             Administración
           </h1>
           <p className="mt-2 max-w-[60ch] text-texto-suave">
-            Gestiona el catálogo y revisa todas las reservas de la tienda.
+            Gestiona el catálogo y revisa las reservas y los pedidos de la tienda.
           </p>
         </div>
         <h2 className="font-display text-2xl font-bold tracking-tight">
@@ -26,6 +28,13 @@ export default function PanelAdmin() {
           Todas las reservas
         </h2>
         <ListaReservasAdmin />
+      </section>
+
+      <section id="admin-pedidos" className="flex flex-col gap-6">
+        <h2 className="font-display text-2xl font-bold tracking-tight">
+          Pedidos
+        </h2>
+        <ListaPedidosAdmin />
       </section>
     </main>
   );

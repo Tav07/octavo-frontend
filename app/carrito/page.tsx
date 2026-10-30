@@ -63,6 +63,12 @@ export default function CarritoPagina() {
             </div>
             <div className="flex gap-3">
               <Link
+                href="/checkout"
+                className="rounded-lg bg-naranja px-5 py-2.5 text-sm font-semibold text-fondo transition-colors hover:bg-naranja-oscuro"
+              >
+                Pagar contra entrega
+              </Link>
+              <Link
                 href="/catalogo"
                 className="rounded-lg border border-borde px-5 py-2.5 text-sm font-semibold text-tinta transition-colors hover:border-naranja"
               >

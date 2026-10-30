@@ -85,6 +85,17 @@ export default function Navbar() {
           )}
           {usuario !== null && (
             <li className="sm:hidden">
+              <Link
+                href="/mis-pedidos"
+                className="font-medium text-tinta transition-colors hover:text-naranja"
+                onClick={alCerrarMenu}
+              >
+                Mis pedidos
+              </Link>
+            </li>
+          )}
+          {usuario !== null && (
+            <li className="sm:hidden">
               <span className="font-medium text-tinta">{usuario.nombre}</span>
             </li>
           )}
@@ -147,6 +158,12 @@ export default function Navbar() {
           </Link>
         ) : (
           <div className="hidden items-center gap-4 sm:flex">
+            <Link
+              href="/mis-pedidos"
+              className="text-sm font-medium text-texto-suave transition-colors hover:text-naranja"
+            >
+              Mis pedidos
+            </Link>
             <span className="text-sm font-medium text-texto-suave max-w-40 truncate">
               {usuario.nombre}
             </span>
