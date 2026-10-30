@@ -6,9 +6,8 @@ import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const ENLACES = [
   { href: "/", texto: "Inicio" },
-  { href: "/#catalogo", texto: "Catálogo" },
+  { href: "/catalogo", texto: "Catálogo" },
   { href: "/#marcas", texto: "Marcas" },
-  { href: "/#reserva", texto: "Reserva" },
 ];
 
 // Navbar según sesión: invitado → "Ingresar"; usuario → su nombre y

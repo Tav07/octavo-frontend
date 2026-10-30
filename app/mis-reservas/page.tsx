@@ -31,7 +31,7 @@ export default function MisReservasPagina() {
       {listo && usuario !== null ? <ListaMisReservas /> : null}
       <p className="mt-8 text-center text-texto-suave">
         ¿Quieres reservar otro par?{" "}
-        <Link href="/#catalogo" className="font-semibold text-naranja hover:underline">
+        <Link href="/catalogo" className="font-semibold text-naranja hover:underline">
           Vuelve al catálogo
         </Link>
       </p>

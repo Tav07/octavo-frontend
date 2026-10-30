@@ -1,13 +1,9 @@
-import { Suspense } from "react";
 import Link from "next/link";
-import Loading from "@/features/common/components/Loading";
-import Catalogo from "@/features/zapatos/components/Catalogo";
 import ListaMarcas from "@/features/zapatos/components/ListaMarcas";
 import FormularioReserva from "@/features/reservas/components/FormularioReserva";
 
-// Home con las secciones y textos exactos de la Entrega 1.
-// El catálogo y las marcas vienen SIEMPRE de la API (sin datos locales);
-// el formulario de reserva se conecta en la fase siguiente.
+// Home con las secciones y textos de la Entrega 1, ahora con el catálogo
+// aparte (en /catalogo). Las marcas vienen SIEMPRE de la API.
 export default function Home() {
   return (
     <main>
@@ -25,32 +21,14 @@ export default function Home() {
           resérvalo en línea.
         </p>
         <Link
-          href="#catalogo"
+          href="/catalogo"
           className="rounded-lg bg-naranja px-7 py-3 font-semibold text-fondo transition-colors hover:bg-naranja-oscuro"
         >
           Ver catálogo
         </Link>
       </section>
 
-      {/* CATÁLOGO (datos desde GET /api/zapatos, paginación por URL) */}
-      <section
-        id="catalogo"
-        className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8"
-      >
-        <h2 className="font-display text-3xl font-bold tracking-tight">
-          Catálogo
-        </h2>
-        <p className="mt-3 max-w-[60ch] text-texto-suave">
-          Filtra los zapatos por categoría, marca, talla o precio para
-          encontrar tu par ideal.
-        </p>
-        {/* useSearchParams requiere límite de navegación dinámica: Suspense */}
-        <Suspense fallback={<Loading texto="Cargando catálogo…" />}>
-          <Catalogo />
-        </Suspense>
-      </section>
-
-      {/* MARCAS (datos desde GET /api/marcas) */}
+      {/* MARCAS (datos desde GET /api/marcas; cada tarjeta llega al catálogo filtrado) */}
       <section
         id="marcas"
         className="bg-gris-suave px-4 py-20 sm:px-6"
@@ -67,21 +45,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* RESERVA (formulario conectado a POST /api/reservas; requiere sesión) */}
+      {/* RESERVA (opción secundaria: primero la compra en el catálogo) */}
       <section
         id="reserva"
-        className="mx-auto max-w-3xl px-4 py-20 sm:px-6 lg:px-8"
+        className="mx-auto max-w-3xl px-4 pb-20 sm:px-6 lg:px-8"
       >
-        <h2 className="font-display text-3xl font-bold tracking-tight">
-          Reserva tu pedido
-        </h2>
-        <p className="mt-3 max-w-[60ch] text-texto-suave">
-          Déjanos tus datos y el par que quieres. Te contactamos para confirmar
-          disponibilidad, precio final y forma de pago. Sin compromiso.
-        </p>
-        <div className="mt-8">
-          <FormularioReserva />
-        </div>
+        <details className="group rounded-2xl border border-borde bg-gris-suave px-6 py-5">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-bold tracking-tight [&::-webkit-details-marker]:hidden">
+            ¿Prefieres apartar tu par antes de comprarlo?
+            <span
+              aria-hidden="true"
+              className="shrink-0 text-2xl font-medium leading-none text-naranja transition-transform group-open:rotate-45"
+            >
+              +
+            </span>
+          </summary>
+          <p className="mt-3 text-sm text-texto-suave">
+            Déjanos tus datos y el par que quieres. Te contactamos para
+            confirmar disponibilidad, precio final y forma de pago. Sin
+            compromiso.
+          </p>
+          <div className="mt-6">
+            <FormularioReserva />
+          </div>
+        </details>
       </section>
     </main>
   );

@@ -18,7 +18,10 @@ import FormularioZapato from "./FormularioZapato";
 
 export default function GestionZapatos() {
   const [pagina, setPagina] = useState(1);
-  const { datos, cargando, error, reintentar } = useZapatos(pagina, 10);
+  const { datos, cargando, error, reintentar } = useZapatos({
+    page: pagina,
+    limit: 10,
+  });
 
   // null → modo crear; un zapato → modo editar (el formulario se
   // remonta con key para precargar sus useState iniciales)

@@ -4,6 +4,9 @@ import type { RespuestaCatalogo, Zapato } from "../domain/tipos";
 export interface FiltrosCatalogo {
   page: number;
   limit: number;
+  // Filtros del catálogo por URL: marca y búsqueda por texto (ambos opcionales).
+  marcaId?: number;
+  q?: string;
 }
 
 // Datos del formulario del admin: lo que exige el zod del backend
@@ -18,13 +21,21 @@ export interface DatosZapato {
   marcaId: number;
 }
 
-// GET /api/zapatos?page=&limit=
+// GET /api/zapatos?page=&limit=&marcaId=&q=
 export async function listarZapatos(
   filtros: FiltrosCatalogo
 ): Promise<RespuestaCatalogo> {
-  return await http<RespuestaCatalogo>(
-    `/zapatos?page=${filtros.page}&limit=${filtros.limit}`
-  );
+  const consulta = new URLSearchParams({
+    page: String(filtros.page),
+    limit: String(filtros.limit),
+  });
+  if (filtros.marcaId !== undefined) {
+    consulta.set("marcaId", String(filtros.marcaId));
+  }
+  if (filtros.q !== undefined && filtros.q !== "") {
+    consulta.set("q", filtros.q);
+  }
+  return await http<RespuestaCatalogo>(`/zapatos?${consulta.toString()}`);
 }
 
 // POST /api/zapatos (solo admin) → 201 con el zapato y su marca

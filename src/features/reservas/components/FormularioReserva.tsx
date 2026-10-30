@@ -24,7 +24,10 @@ const LIMITE_SELECT = 100;
 
 export default function FormularioReserva() {
   const { usuario, listo } = useAuth();
-  const { datos, cargando, error, reintentar } = useZapatos(1, LIMITE_SELECT);
+  const { datos, cargando, error, reintentar } = useZapatos({
+    page: 1,
+    limit: LIMITE_SELECT,
+  });
 
   const [zapatoId, setZapatoId] = useState("");
   const [telefono, setTelefono] = useState("");

@@ -1,27 +1,31 @@
-// Hook del catálogo: pide la página indicada y expone cargando/error/datos.
-// La página vive en la URL (?page=); este hook solo la consume.
+// Hook del catálogo: pide la página indicada con los filtros activos y
+// expone cargando/error/datos. Los parámetros viven en la URL
+// (/catalogo?page=&marcaId=&q=); este hook solo los consume.
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { mensajeDeError } from "@/features/common/http";
 import type { RespuestaCatalogo } from "../domain/tipos";
+import type { FiltrosCatalogo } from "../services/zapatos";
 import { listarZapatos } from "../services/zapatos";
 import type { EstadoDatos } from "./tipos";
 
 // Último resultado completado: null en errores y datos del intento previo.
 interface Resultado {
-  pagina: number;
+  clave: string;
   intento: number;
   datos: RespuestaCatalogo | null;
   error: string | null;
 }
 
-const SIN_RESULTADO: Resultado = { pagina: 0, intento: -1, datos: null, error: null };
+const SIN_RESULTADO: Resultado = { clave: "", intento: -1, datos: null, error: null };
 
 export function useZapatos(
-  pagina: number,
-  limite: number
+  filtros: FiltrosCatalogo
 ): EstadoDatos<RespuestaCatalogo> {
+  // Identidad de la consulta: cualquier cambio de página o filtro
+  // dispara la carga de nuevo.
+  const clave = `${filtros.page}|${filtros.marcaId ?? ""}|${filtros.q ?? ""}`;
   const [resultado, setResultado] = useState<Resultado>(SIN_RESULTADO);
   const [intento, setIntento] = useState(0);
 
@@ -31,27 +35,28 @@ export function useZapatos(
 
   useEffect(() => {
     let vigente = true;
-    listarZapatos({ page: pagina, limit: limite })
+    listarZapatos(filtros)
       .then((respuesta) => {
         if (vigente) {
-          setResultado({ pagina, intento, datos: respuesta, error: null });
+          setResultado({ clave, intento, datos: respuesta, error: null });
         }
       })
       .catch((causa: unknown) => {
         if (vigente) {
-          setResultado({ pagina, intento, datos: null, error: mensajeDeError(causa) });
+          setResultado({ clave, intento, datos: null, error: mensajeDeError(causa) });
         }
       });
-    // Al desmontar (o si ya cambió la página) se descarta la respuesta tardía
+    // Al desmontar (o si ya cambió la consulta) se descarta la respuesta tardía
     return () => {
       vigente = false;
     };
-  }, [pagina, limite, intento]);
+    // Los filtros llegan serializados en `clave`: es su versión estable.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clave, intento]);
 
   // Cargando se DERIVA (no se fija en el effect): un intento nuevo vuelve a
   // cargar hasta que su respuesta llega y reemplaza al resultado anterior.
-  const cargando =
-    resultado.pagina !== pagina || resultado.intento !== intento;
+  const cargando = resultado.clave !== clave || resultado.intento !== intento;
   const datos = cargando ? null : resultado.datos;
   const error = cargando ? null : resultado.error;
 
